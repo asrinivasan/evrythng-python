@@ -155,6 +155,14 @@ def sendRequest(method, url, body='', headers=''):
 	
 	return [response, rt]
 
+# Helper to make project qualifier
+def makeProjectURL(project):
+	if project:
+		projectURL = "?project=" + project
+	else:
+		projectURL = ""
+
+	return projectURL
 
 #---- Implementation of a few endpoints in the engine 	
 
@@ -169,19 +177,12 @@ def headThngs():
 	return response	
 
 # GET the list of all THNGS for a user
-def getAllThngs(scope=''):
+def getAllThngs(project=''):
 	headers = {"Accept": "application/json"}
-
-	if scope=='all':
-		scopedUrl="/thngs?app=all"
-	elif scope=='':
-		scopedUrl="/thngs"
-	else:
-		scopedUrl="/thngs/?app=%s" % scope
 
 	response = sendRequest(
 		method="GET",
-		url=scopedUrl,
+		url="/things" + makeProjectURL(project),
 		headers=headers
 	)
 	return response	
@@ -201,19 +202,12 @@ def getThngs(filterString):
 
 
 # POST a new THNG
-def createThng(thngDocument,scope=''):
+def createThng(thngDocument,project=''):
 	headers = {"Content-Type": "application/json"}
-	
-	if scope=='all':
-		scopedUrl="/thngs?app=all"
-	elif scope=='':
-		scopedUrl="/thngs"
-	else:
-		scopedUrl="/thngs/?app=%s" % scope
 	
 	response = sendRequest(
 		method="POST",
-		url=scopedUrl,
+		url="/thngs" + makeProjectURL(project),
 		body=thngDocument,
 		headers=headers
 	)
@@ -272,19 +266,12 @@ def headProducts():
 
 
 # POST a new PRODUCT
-def createProduct(productDocument,scope='all'):
+def createProduct(productDocument,project=''):
 	headers = {"Content-Type": "application/json"}
-	
-	if scope=='all':
-		scopedUrl="/products?app=all"
-	elif scope=='':
-		scopedUrl="/products"
-	else:
-		scopedUrl="/products/?app=%s" % scope
 	
 	response = sendRequest(
 		method="POST",
-		url=scopedUrl,
+		url="/products" + makeProjectURL(project),
 		body=productDocument,
 		headers=headers
 	)
@@ -294,19 +281,12 @@ def createProduct(productDocument,scope='all'):
 	
 
 # GET the list of all THNGS for a user
-def getProducts(scope=''):
+def getProducts(project=''):
 	headers = {"Accept": "application/json"}
-
-	if scope=='all':
-		scopedUrl="/products?app=all"
-	elif scope=='':
-		scopedUrl="/products"
-	else:
-		scopedUrl="/products/?app=%s" % scope
 
 	response = sendRequest(
 		method="GET",
-		url=scopedUrl,
+		url="/products" + makeProjectURL(project),
 		headers=headers
 	)
 
@@ -547,19 +527,12 @@ def storeCollectionThngsinCSV(collectionID):
 
 # GET all action types
 # FIXME Allow to give as param the projectId, the thng, the product, the tag(s) 
-def getActionTypes(scope=''):
-	
-	if scope=='all':
-		scopedUrl="/actions?app=all"
-	elif scope=='':
-		scopedUrl="/actions"
-	else:
-		scopedUrl="/actions?app=%s" % scope
+def getActionTypes(project=''):
 	
 	headers = {"Accept": "application/json"}
 	response = sendRequest(
 		method="GET",
-		url=scopedUrl,
+		url="/actions" + makeProjectURL(project),
 		headers=headers
 	)
 	
@@ -567,19 +540,12 @@ def getActionTypes(scope=''):
 	return response
 
 # POST a new action type
-def createActionType(actionTypeDocument,scope=''):
-	
-	if scope=='all':
-		scopedUrl="/actions?app=all"
-	elif scope=='':
-		scopedUrl="/actions"
-	else:
-		scopedUrl="/actions?app=%s" % scope
+def createActionType(actionTypeDocument,project=''):
 	
 	headers = {"Content-Type": "application/json"}
 	response = sendRequest(
 		method="POST",
-		url=scopedUrl,
+		url="/actions" + makeProjectURL(project),
 		body=actionTypeDocument,
 		headers=headers
 	)
